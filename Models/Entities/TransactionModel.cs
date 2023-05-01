@@ -21,5 +21,7 @@ namespace E_G_FinalProject.Models.Entities
         public string SWIFTCode { get; set; }
 
         public string Amount { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }

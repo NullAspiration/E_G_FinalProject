@@ -6,9 +6,7 @@
 
 <h1 class="text-center"><i class="fas fa-comment-dollar text-success"></i> Transaction History</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -19,15 +17,14 @@
                 @Html.DisplayNameFor(model => model.AccountName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BankName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SWIFTCode)
+                @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
-            <th></th>
+            <th>
+            <a onclick="showInPopup('@Url.Action("AddOrEdit","TransactionModels",null,Context.Request.Scheme)','New Transaction')" class="btn btn-success text-white"><i class="fas fa-random"></i> New Transaction</a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -40,17 +37,13 @@
                 @Html.DisplayFor(modelItem => item.AccountName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BankName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SWIFTCode)
+                @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.TransactionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TransactionId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.TransactionId">Delete</a>
             </td>
         </tr>

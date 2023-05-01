@@ -28,19 +28,33 @@ namespace E_G_FinalProject.Controllers
         }
 
 
-        // GET: TransactionModels/Create
-        public IActionResult Create()
+        // GET: TransactionModels/AddOrEdit
+        // GET: TransactionModels/AddOrEdit/5 <---coresponding record id
+        public async Task<IActionResult> AddOrEdit(int id=0)
         {
-            return View();
+            if (id == 0)
+            {
+                return View();
+            }
+            else 
+            {
+                var transactionModel = await _context.Transactions.FindAsync(id);
+                if (transactionModel == null)
+                {
+                    return NotFound();
+                }
+                return View(transactionModel);
+            }
         }
 
         // POST: TransactionModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount")] TransactionModel transactionModel)
+        public async Task<IActionResult> Create(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
         {
             if (ModelState.IsValid)
             {
+                if (id == 0)
                 _context.Add(transactionModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -48,28 +62,11 @@ namespace E_G_FinalProject.Controllers
             return View(transactionModel);
         }
 
-        // GET: TransactionModels/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
-
-            var transactionModel = await _context.Transactions.FindAsync(id);
-            if (transactionModel == null)
-            {
-                return NotFound();
-            }
-            return View(transactionModel);
-        }
-
         // POST: TransactionModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount")] TransactionModel transactionModel)
+        public async Task<IActionResult> Edit(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
         {
             if (id != transactionModel.TransactionId)
             {
