@@ -82,6 +82,7 @@ namespace E_G_FinalProject.Controllers
             {
                 if (id == 0)
                 {
+                    transactionModel.Date = DateTime.Now;
                     _context.Add(transactionModel);
                     await _context.SaveChangesAsync();
                 }
