@@ -11,9 +11,10 @@ namespace E_G_FinalProject.Models.ViewModels
 
         public PokemonVM(Pokemon pokemon)
         {
+            Id = 0;
             Name = pokemon.Name;
-            ImageUrl = pokemon.Sprites.FrontDefault;
-            Type = pokemon.Types.FirstOrDefault()?.Type.Name;
+            ImageUrl = pokemon.Sprites;
+            Type = pokemon.Types.FirstOrDefault();
             Height = pokemon.Height / 10.0;
             Weight = pokemon.Weight / 10.0;
         }
