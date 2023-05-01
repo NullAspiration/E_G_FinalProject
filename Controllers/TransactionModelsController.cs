@@ -34,7 +34,7 @@ namespace E_G_FinalProject.Controllers
         {
             if (id == 0)
             {
-                return View();
+                return View(new TransactionModel());
             }
             else 
             {
@@ -48,25 +48,40 @@ namespace E_G_FinalProject.Controllers
         }
 
         // POST: TransactionModels/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
-        {
-            if (ModelState.IsValid)
-            {
-                if (id == 0)
-                _context.Add(transactionModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(transactionModel);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (id == 0)
+        //        _context.Add(transactionModel);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(transactionModel);
+        //}
+
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var transactionModel = await _context.Transactions.FindAsync(id);
+        //    if (transactionModel == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(transactionModel);
+
+        //}
 
         // POST: TransactionModels/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
+        public async Task<IActionResult> AddOrEdit(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
         {
             if (id != transactionModel.TransactionId)
             {
