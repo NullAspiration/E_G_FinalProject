@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using E_G_FinalProject.Models.Entities;
+﻿using E_G_FinalProject.Models.Entities;
 using E_G_FinalProject.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_G_FinalProject.Controllers
 {
@@ -22,21 +17,21 @@ namespace E_G_FinalProject.Controllers
         // GET: TransactionModels
         public async Task<IActionResult> Index()
         {
-              return _context.Transactions != null ? 
-                          View(await _context.Transactions.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
+            return _context.Transactions != null ?
+                        View(await _context.Transactions.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
         }
 
 
         // GET: TransactionModels/AddOrEdit
-        // GET: TransactionModels/AddOrEdit/5 <---coresponding record id
-        public async Task<IActionResult> AddOrEdit(int id=0)
+        // GET: TransactionModels/AddOrEdit/5 <---corresponding record id
+        public async Task<IActionResult> AddOrEdit(int id = 0)
         {
             if (id == 0)
             {
                 return View(new TransactionModel());
             }
-            else 
+            else
             {
                 var transactionModel = await _context.Transactions.FindAsync(id);
                 if (transactionModel == null)
@@ -47,68 +42,73 @@ namespace E_G_FinalProject.Controllers
             }
         }
 
-        // POST: TransactionModels/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (id == 0)
-        //        _context.Add(transactionModel);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(transactionModel);
-        //}
+        //POST: TransactionModels/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == 0)
+                    _context.Add(transactionModel);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(transactionModel);
+        }
 
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var transactionModel = await _context.Transactions.FindAsync(id);
-        //    if (transactionModel == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(transactionModel);
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var transactionModel = await _context.Transactions.FindAsync(id);
+            if (transactionModel == null)
+            {
+                return NotFound();
+            }
+            return View(transactionModel);
 
-        //}
+        }
 
-        // POST: TransactionModels/Edit/5
+        // POST: TransactionModels/AddOrEdit
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(int id, [Bind("TransactionId,AccountNumber,AccountName,BankName,SWIFTCode,Amount,Date")] TransactionModel transactionModel)
         {
-            if (id != transactionModel.TransactionId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                if (id == 0)
                 {
-                    _context.Update(transactionModel);
+                    _context.Add(transactionModel);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!TransactionModelExists(transactionModel.TransactionId))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(transactionModel);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!TransactionModelExists(transactionModel.TransactionId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
+
+                //returns a json object
                 return RedirectToAction(nameof(Index));
             }
-            return View(transactionModel);
+            return Content("Malformed JSON Object");
         }
 
         // GET: TransactionModels/Delete/5
@@ -143,14 +143,14 @@ namespace E_G_FinalProject.Controllers
             {
                 _context.Transactions.Remove(transactionModel);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TransactionModelExists(int id)
         {
-          return (_context.Transactions?.Any(e => e.TransactionId == id)).GetValueOrDefault();
+            return (_context.Transactions?.Any(e => e.TransactionId == id)).GetValueOrDefault();
         }
     }
 }

@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = null;
 }
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit">
+        <form asp-action="AddOrEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TransactionId" />
             <input type="hidden" asp-for="Date" />
@@ -80,11 +81,12 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                <input type="submit" value="Submit" class="btn btn-primary btn-block" />
             </div>
         </form>
     </div>
 </div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
