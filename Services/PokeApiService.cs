@@ -1,4 +1,6 @@
 ﻿using System.Text.Json.Serialization;
+using E_G_FinalProject.Models.Entities;
+using Newtonsoft.Json;
 
 namespace E_G_FinalProject.Services
 {
